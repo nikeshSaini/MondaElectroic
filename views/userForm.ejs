@@ -1,0 +1,30 @@
+<!-- register.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+</head>
+<body>
+    <h1>User Registration</h1>
+    <form action="/register" method="post">
+        <div>
+            <label for="fullName">Full Name:</label><br>
+            <input type="text" id="fullName" name="userData[fullName]" placeholder="Enter your full name" required>
+        </div>
+        <br>
+        <div>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="userData[email]" placeholder="Enter your email" required>
+        </div>
+        <br>
+        <div>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="userData[password]" placeholder="Enter your password" required>
+        </div>
+        <br>
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

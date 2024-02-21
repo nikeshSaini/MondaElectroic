@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div>
+            <a href="#">Attendance</a>
+            <a href="#">Feedback</a>
+        </div>
+        <div>
+            <!-- Placeholder for user name -->
+            <a href="#">Logout</a> <!-- Add Logout link when user is logged in -->
+            <span style="margin-left: 10px;" id="username-placeholder"><%= userCred.email %></span>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Monad Electronics</h1>
+        <div>
+            <button class="button">Attendance</button>
+            <button class="button">Feedback</button>
+        </div>
+    </div>
+
+    
+</body>
+</html>

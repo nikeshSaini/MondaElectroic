@@ -1,0 +1,23 @@
+<!-- listings.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listings</title>
+</head>
+<body>
+    <h1>Listings</h1>
+    <ul>
+        <% listings.forEach(function(listing) { %>
+            <li>
+                <h2><%= listing.venue %></h2>
+                <p>Description: <%= listing.description %></p>  
+                <p>Expenditure: <%= listing.expenditure %></p>
+                <p>Location: <%= listing.location %></p>
+                <img src="/uploads/<%= listing.img %>" alt="<%= listing.venue %> "> <!-- Corrected the image src path -->
+            </li>
+        <% }); %>
+    </ul>
+</body>
+</html>
