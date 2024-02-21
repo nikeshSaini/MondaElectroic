@@ -26,7 +26,7 @@ const initDB = async () => {
     // Insert user
     const user = await UserDetails.create({
       fullName: 'Nikesh Saini',
-      email: 'nikesh@gmail.com',
+      email: 'nikeshsplash@gmail.com',
       password: 'qwerty@123'
     });
 

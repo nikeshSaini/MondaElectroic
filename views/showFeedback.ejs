@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Data</title>
+</head>
+<body>
+    <h1>Feedback Data</h1>
+    <% if (feedbacks.length > 0) { %>
+        <ul>
+            <% feedbacks.forEach(function(feedback) { %>
+                <li>
+                    <strong>User ID:</strong> <%= feedback.userId %><br>
+                    <strong>Venue Name:</strong> <%= feedback.venue %><br>
+                    <strong>Description:</strong> <%= feedback.description %><br>
+                    <strong>Expenditure:</strong> <%= feedback.expenditure %><br>
+                    <strong>Location:</strong> <%= feedback.location %><br>
+                    <!-- You can include additional fields as needed -->
+                    <hr>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No feedback data available.</p>
+    <% } %>
+</body>
+</html>

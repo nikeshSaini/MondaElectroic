@@ -35,10 +35,7 @@ async function main() {
   await mongoose.connect(mongo_url);
 }
 
-app.get('/',(req,res)=>{
-  
-  res.render("login.ejs" );
-})
+
 //first step user registration
 
 app.post("/register", async (req, res) => {
@@ -99,83 +96,63 @@ app.get("/userPreview", async (req, res) => {
 
 //post data after submiting the form
 
-app.post("/listings", upload.single('pageImg'), async (req, res) => {
+// Post data after submitting the feedback form
+app.post("/feedback", upload.single('pageImg'), async (req, res) => {
   try {
     if (!req.file) {
       throw new Error("No file uploaded");
     }
 
-    const listingData = req.body.listing;
+    const feedbackData = req.body.feedback;
     const img = req.file.filename;
-    const listingItem = new Listing({
-      venue: listingData.venue,
-      description: listingData.description,
+    const feedbackItem = new Listing({
+      userId: feedbackData.userId,
+      venue: feedbackData.venue,
+      description: feedbackData.description,
       img: img,
-      expenditure: listingData.expenditure,
-      location: listingData.location
+      expenditure: feedbackData.expenditure,
+      location: feedbackData.location
     });
-    await listingItem.save();
-    const listings = await Listing.find({});
-    res.render("preview", { listings });
+
+    await feedbackItem.save();
+    res.status(201).send("Feedback submitted successfully");
   } catch (error) {
-    console.error("Error saving listing:", error);
-    res.status(500).send("Error saving listing: " + error.message);
+    console.error("Error saving feedback:", error);
+    res.status(500).send("Error saving feedback: " + error.message);
   }
-
-
 });
 
 
 
 
-//user/attendance/id
-
-app.get("/user/:id", (req, res)=>{
-  const {id} = req.params;
-  
-})
-
-//login user landing page
-
-app.get('/user', (req, res) => {
-  const userCred = req.session.userCred; // Retrieving userCred from session
-    res.render("landingPage.ejs", { userCred });
-});
 
 
 
-//login post route
 
+
+//login credential post route
 app.post("/login", async(req,res)=>{
-  const title ="Login";
-    const {email,password} = req.body;
-    try{
-      const userCred = await userDetails.findOne({email});
+  const { email, password } = req.body;
+  try {
+    const userCred = await userDetails.findOne({ email });
 
-      if(!userCred){
-        return res.status(404).json({message:"User not found"});
-      }
-
-      if(userCred.password !== password){
-        return res.status(401).json({message:"incorrect password"});
-      }
-
-      req.session.userCred = userCred; // Storing userCred in session
-      res.redirect('/user');
-
-    }catch(error){
-      res.status(500).json({ message: "Internal server error" });
+    if (!userCred) {
+      return res.status(404).json({ message: "User not found" });
     }
 
+    if (userCred.password !== password) {
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+
+    req.session.userCred = userCred; // Storing the object userCred in session
+    res.redirect('/user');
+  } catch(error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 
-//login route
 
-app.get("/login" ,(req, res)=>{
-  res.render("login.ejs");
-})
-//logout
 
 // Logout route
 app.get("/logout", (req, res) => {
@@ -192,14 +169,57 @@ app.get("/logout", (req, res) => {
 });
 
 
-app.get("/register", (req,res)=>{
-  res.render("userForm.ejs");
+// Default route
+app.get('/', (req, res) => {
+  // Check if user is logged in (userCred exists in session)
+  if (req.session.userCred) {
+    // User is logged in, render the landing page
+    res.render("landingPage.ejs", { userCred: req.session.userCred });
+  } else {
+    // User is not logged in, render the login page
+    res.render("login.ejs");
+  }
+});
+
+
+//login route
+
+app.get("/login" ,(req, res)=>{
+  res.render("login.ejs");
 })
 
-app.get("/", (req,res)=>{
-    res.render("index.ejs");
+
+//login user landing page
+app.get('/user', (req, res) => {
+  const userCred = req.session.userCred; // Retrieving userCred from session
+  if (!userCred) {
+      return res.redirect('/login'); // Redirect to login if not authenticated
+  }
+  res.render("landingPage.ejs", { userCred });
+});
+
+// /register
+app.get("/register", (req,res)=>{
+  res.render("userForm.ejs");
+});
+//feedback
+
+app.get('/feedback', (req, res) => {
+  const userCred = req.session.userCred; // Retrieving userCred from session
+  if (!userCred) {
+      return res.redirect('/login'); // Redirect to login if not authenticated
+  }
+  res.render('index', { userCred });
+});
+
+//preview feedback
+app.get('/view/feedback', async(req,res)=>{
+  const userCred = req.session.userCred; // Retrieving userCred from session
+  const currId =userCred._id;
+  const feedbacks = await Listing.find({userId : currId});
+  res.render("showFeedback.ejs",{feedbacks});
 })
 
 app.listen(port, (req, res)=>{
     console.log("app is listening" + port);
-})
+});

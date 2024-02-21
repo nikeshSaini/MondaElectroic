@@ -46,19 +46,22 @@
     <nav>
         <div>
             <a href="#">Attendance</a>
-            <a href="#">Feedback</a>
+            <a href="/view/feedback">Feedback</a>
         </div>
         <div>
             <!-- Placeholder for user name -->
             <a href="/logout">Logout</a> <!-- Add Logout link when user is logged in -->
             <span style="margin-left: 10px;" id="username-placeholder"><%= userCred.email %></span>
+            
         </div>
     </nav>
     <div class="container">
         <h1>Monad Electronics</h1>
         <div>
-            <button class="button">Attendance</button>
-            <button class="button">Feedback</button>
+            <form method="get" action="/attendance"><button class="button">Attendance</button></form>
+
+            <form method="get" action="/feedback"><button class="button">Feedback</button></form>
+            
         </div>
     </div>
 
