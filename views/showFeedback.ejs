@@ -6,16 +6,16 @@
     <title>Feedback Data</title>
 </head>
 <body>
-    <h1>Feedback Data</h1>
+    <h1>Feedback Data:<%= currUserName %></h1>
     <% if (feedbacks.length > 0) { %>
         <ul>
             <% feedbacks.forEach(function(feedback) { %>
                 <li>
-                    <strong>User ID:</strong> <%= feedback.userId %><br>
                     <strong>Venue Name:</strong> <%= feedback.venue %><br>
                     <strong>Description:</strong> <%= feedback.description %><br>
                     <strong>Expenditure:</strong> <%= feedback.expenditure %><br>
                     <strong>Location:</strong> <%= feedback.location %><br>
+                    <!-- <img src="/uploads/<%= feedback.img %>" alt="<%= feedback.venue %> "> -->
                     <!-- You can include additional fields as needed -->
                     <hr>
                 </li>

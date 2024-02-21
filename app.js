@@ -115,13 +115,12 @@ app.post("/feedback", upload.single('pageImg'), async (req, res) => {
     });
 
     await feedbackItem.save();
-    res.status(201).send("Feedback submitted successfully");
+    res.redirect('/user');
   } catch (error) {
     console.error("Error saving feedback:", error);
     res.status(500).send("Error saving feedback: " + error.message);
   }
 });
-
 
 
 
@@ -215,10 +214,14 @@ app.get('/feedback', (req, res) => {
 //preview feedback
 app.get('/view/feedback', async(req,res)=>{
   const userCred = req.session.userCred; // Retrieving userCred from session
+  if (!userCred) {
+    return res.redirect('/login'); // Redirect to login if not authenticated
+  }
   const currId =userCred._id;
+  const currUserName = userCred.fullName;
   const feedbacks = await Listing.find({userId : currId});
-  res.render("showFeedback.ejs",{feedbacks});
-})
+  res.render("showFeedback.ejs",{feedbacks,currUserName});
+}); 
 
 app.listen(port, (req, res)=>{
     console.log("app is listening" + port);
