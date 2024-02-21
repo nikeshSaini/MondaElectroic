@@ -15,10 +15,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs"); // to apply ejs
 app.set("views", path.join(__dirname, "views")); 
 app.use(express.static(path.join(__dirname, "public")));
+
 
 //database connection setup
 const mongo_url = "mongodb://127.0.0.1:27017/clientElectric";
@@ -33,6 +35,32 @@ async function main() {
   await mongoose.connect(mongo_url);
 }
 
+app.get('/',(req,res)=>{
+  
+  res.render("login.ejs" );
+})
+//first step user registration
+
+app.post("/register", async (req, res) => {
+  try {
+    const userData = req.body.userData;
+
+    // Create a new user document
+    const newUser = new userDetails({
+      fullName: userData.fullName,
+      email: userData.email,
+      password: userData.password,
+    });
+
+    // Save the new user to the database
+    const savedUser = await newUser.save();
+    res.redirect('/login');
+    
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).json(`${ error}`);
+  }
+});
 
 // Configure multer for file upload handling
 const storage = multer.diskStorage({
@@ -46,6 +74,8 @@ let upload = multer({
   storage: storage
 });
 
+
+
 //to show items
 app.get("/preview", async (req, res) => {
   try {
@@ -56,6 +86,7 @@ app.get("/preview", async (req, res) => {
     res.status(500).send("Error fetching listings");
   }
 });
+
 app.get("/userPreview", async (req, res) => {
   try {
     const listings = await userDetails.find({});
@@ -94,27 +125,9 @@ app.post("/listings", upload.single('pageImg'), async (req, res) => {
 
 });
 
-//registration
-app.post("/register", async (req, res) => {
-  try {
-    const userData = req.body.userData;
 
-    // Create a new user document
-    const newUser = new userDetails({
-      fullName: userData.fullName,
-      email: userData.email,
-      password: userData.password,
-    });
 
-    // Save the new user to the database
-    const savedUser = await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully', user: savedUser });
-  } catch (error) {
-    console.error('Error registering user:', error);
-    res.status(500).json(`${ error}`);
-  }
-});
 //user/attendance/id
 
 app.get("/user/:id", (req, res)=>{
@@ -134,6 +147,7 @@ app.get('/user', (req, res) => {
 //login post route
 
 app.post("/login", async(req,res)=>{
+  const title ="Login";
     const {email,password} = req.body;
     try{
       const userCred = await userDetails.findOne({email});
@@ -161,6 +175,21 @@ app.post("/login", async(req,res)=>{
 app.get("/login" ,(req, res)=>{
   res.render("login.ejs");
 })
+//logout
+
+// Logout route
+app.get("/logout", (req, res) => {
+  // Clear the session
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      res.status(500).send("Error destroying session");
+    } else {
+      // Redirect the user to the login page after logout
+      res.redirect("/login");
+    }
+  });
+});
 
 
 app.get("/register", (req,res)=>{
