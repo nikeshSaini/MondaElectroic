@@ -1,21 +1,27 @@
+require("dotenv").config({ path: "../.env" });
 const mongoose = require("mongoose");
 const Listing = require("../models/listing.js");
 const UserDetails = require("../models/userDetails.js");
 const WorkSession =require("../models/attendance.js");
 
-const mongo_url = "mongodb://127.0.0.1:27017/clientElectric";
+
+//database connection
 
 main()
-  .then(() => {
+  .then(() => { 
     console.log("connected to DB");
-    initDB();
   })
   .catch((err) => {
     console.log(err);
   });
+async function main() { 
 
-async function main() {
-  await mongoose.connect(mongo_url);
+  await mongoose.connect( process.env.MONGO_URL,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    dbName: 'Monad_Electronics',
+  });
+  
 }
 
 const initDB = async () => {

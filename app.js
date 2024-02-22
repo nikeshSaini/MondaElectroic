@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -9,7 +10,7 @@ const fs = require("fs");
 const multer = require("multer"); // Add multer for file upload handling
 var session = require('express-session')
 const app = express();
-const port = 3000;
+const port = process.env.PORT ;
 
 app.use(session({
   secret: 'your_secret_key_here',
@@ -24,19 +25,20 @@ app.use(express.static(path.join(__dirname, "public")));
 
 
 //database connection setup
-const mongo_url = "mongodb://127.0.0.1:27017/clientElectric";
+ 
 main()
-  .then(() => {
+  .then(() => { 
     console.log("connected to DB");
+    // console.log(process.env.MONGO_URL);
   })
   .catch((err) => {
     console.log(err);
   });
-async function main() {
-  await mongoose.connect(mongo_url);
+async function main() { 
+  await mongoose.connect( process.env.MONGO_URL);
 }
 
-
+ 
 //first step user registration
 
 app.post("/register", async (req, res) => {
@@ -277,3 +279,4 @@ app.get('/attendance',(req,res)=>{
 app.listen(port, (req, res)=>{
     console.log("app is listening" + port);
 });
+
