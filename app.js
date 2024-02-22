@@ -2,10 +2,11 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
+const userDetails = require('./models/userDetails'); 
+const WorkSession = require("./models/attendance.js");
 const ejs = require("ejs");
 const fs = require("fs");
 const multer = require("multer"); // Add multer for file upload handling
-const userDetails = require('./models/userDetails'); 
 var session = require('express-session')
 const app = express();
 const port = 3000;
@@ -95,6 +96,42 @@ app.get("/userPreview", async (req, res) => {
 });
 
 //post data after submiting the form
+
+app.post('/start', async (req, res) => {
+
+  try {
+    // Create a new work session document with the starting time
+    const sessionData =req.body.session;
+    const newworkSession = new WorkSession({
+      userId: sessionData.userId,
+      startTime: new Date()
+    });
+    // Save the document to the database
+    await newworkSession.save();
+    res.send('Starting time recorded.');
+    
+  } catch (error) {
+    console.error('Error recording starting time:', error);
+    res.status(500).send('Error recording starting time.');
+  }
+});
+
+app.post('/end', async (req, res) => {
+  try {
+    // Find the latest work session and update its ending time
+    const sessionData =req.body.session;
+    const latestSession = await WorkSession.findOne().sort({startTime: -1});
+    if (!latestSession) {
+      return res.status(404).send('No active work session found.');
+    }
+    latestSession.endTime = new Date();
+    await latestSession.save();
+    res.send('Ending time recorded.');
+  } catch (error) {
+    console.error('Error recording ending time:', error);
+    res.status(500).send('Error recording ending time.');
+  }
+});
 
 // Post data after submitting the feedback form
 app.post("/feedback", upload.single('pageImg'), async (req, res) => {
@@ -222,7 +259,21 @@ app.get('/view/feedback', async(req,res)=>{
   const feedbacks = await Listing.find({userId : currId});
   res.render("showFeedback.ejs",{feedbacks,currUserName});
 }); 
+//attendance page route
+app.get('/view/attendance', async(req,res)=>{
+  const userCred = req.session.userCred; // Retrieving userCred from session
+  if (!userCred) {
+    return res.redirect('/login'); // Redirect to login if not authenticated
+  }
+  const currId =userCred._id;
+  const worksession = await WorkSession.find({ userId: currId }).sort({ startTime: 1 });
+  res.render("preview.ejs",{worksession});
+}); 
 
+app.get('/attendance',(req,res)=>{
+  const userCred = req.session.userCred;// Retrieving userCred from session
+  res.render('showattendance.ejs',{userCred});
+})
 app.listen(port, (req, res)=>{
     console.log("app is listening" + port);
 });

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Work Session</title>
+    <style>
+      .main {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        gap: 20px;
+        background-color: #f4f4f4;
+      }
+
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      nav h1 {
+        margin: 0;
+      }
+
+      form {
+        text-align: center;
+      }
+      a {
+        color: white; /* Sets the font color to white */
+        text-decoration: none; /* Removes underline */
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/"><h1>Monad electrics</h1></a>
+    </nav>
+
+    <div class="main">
+      <form action="/start" method="post">
+        <input type="hidden" id="userId" name="session[userId]" value="<%=  userCred._id %>">
+        <button type="submit">Start Work</button>
+      </form>
+
+      <form action="/end" method="post">
+        <input type="hidden" id="userId" name="session[userId]" value="<%=  userCred._id %>">
+        <button type="submit">End Work</button>
+      </form>
+    </div>
+  </body>
+</html>

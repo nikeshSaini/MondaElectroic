@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Listing = require("../models/listing.js");
 const UserDetails = require("../models/userDetails.js");
+const WorkSession =require("../models/attendance.js");
 
 const mongo_url = "mongodb://127.0.0.1:27017/clientElectric";
 
@@ -22,6 +23,7 @@ const initDB = async () => {
     // Delete existing data
     await UserDetails.deleteMany({});
     await Listing.deleteMany({});
+    await WorkSession.deleteMany({});
 
     // Insert user
     const user = await UserDetails.create({
@@ -38,7 +40,19 @@ const initDB = async () => {
       img: "null",
       expenditure: 3000,
       location: "jaipur"
+    }); 
+
+
+    const startTime = new Date(); // Current date and time
+    const endTime = null; 
+
+    //initialize the worksession
+    await WorkSession.create({
+      userId: user._id,
+      startTime: startTime,
+      endTime: endTime,
     });
+
 
     console.log("Data is initialized");
   } catch (error) {
