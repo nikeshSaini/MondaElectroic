@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User List</title>
     <style>
-        /* Add your CSS styles here */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -27,13 +30,67 @@
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
         }
         .btn:hover {
             background-color: #0056b3;
         }
+        nav {
+            background-color: #333;
+            color: #fff;
+            height: 65px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        img {
+            height: 45px;
+        }
+        .left-side {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 600px) {
+            table {
+                font-size: 12px;
+            }
+            th, td {
+                padding: 8px;
+            }
+            .btn {
+                padding: 8px 16px;
+            }
+            nav {
+                height: auto;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            nav a {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+        }
     </style>
 </head>
 <body>
+    <nav>
+        <div class="left-side">
+            <a href="/admin"><img src="../logo.jpeg" alt=""></a>
+        </div>
+    </nav>
     <h1>User List</h1>
     <table>
         <thead>
