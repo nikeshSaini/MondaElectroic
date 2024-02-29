@@ -110,7 +110,7 @@
       .right-side-footer h3 {
         margin-bottom: 2px;
       }
-      .admin-bar a{
+      .User-bar a{
         color: white;
         text-decoration: none;
         padding-right: 20px;
@@ -121,26 +121,25 @@
   <body>
     <nav class="navbar-container">
       <div class="logo">
-        <img src="<%= './logo.jpeg' %>" alt="" />
+        <img src="../logo.jpeg" alt="" />
+
       </div>
-      <div class="admin-bar">
+      <div class="User-bar">
         <i></i>
-        <a href="/adminlogin">Admin</a>
+        <a href="/login">Users</a>
       </div>
     </nav>
 
     <div class="container">
-      <h2>Login</h2>
-      <form action="/login" method="post">
+      <h2>Admin Login</h2>
+      <form action="/adminlogin" method="post">
         <label for="email">Email:</label>
         <input type="text" id="email" name="email" required />
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required />
         <input type="submit" value="Login" />
       </form>
-      <div class="signup-link">
-        <p>Don't have an account? <a href="/register">Sign up</a></p>
-      </div>
+      
     </div>
 
     <div class="outer-footer">

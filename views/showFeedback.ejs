@@ -1,28 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Feedback Data</title>
-</head>
-<body>
-    <h1>Feedback Data:<%= currUserName %></h1>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+      }
+      nav {
+        background-color: #333;
+        color: #fff;
+        height: 65px;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        margin-right: 20px;
+      }
+      .right-side {
+        display: flex;
+        align-items: baseline;
+      }
+      .right-side a img {
+        height: 15px;
+      }
+      .container {
+        text-align: center;
+        margin-top: 50px;
+      }
+      .button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 10px;
+      }
+      .button:hover {
+        background-color: #0056b3;
+      }
+      img {
+        height: 45px;
+      }
+      .left-side {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 20px;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      li {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        width: 300px;
+      }
+      li strong {
+        font-weight: bold;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="left-side">
+        <a href="/"><img src="../logo.jpeg" alt="" /></a>
+      </div>
+    </nav>
+    <h1>Feedback Data: <%= currUserName %></h1>
     <% if (feedbacks.length > 0) { %>
-        <ul>
-            <% feedbacks.forEach(function(feedback) { %>
-                <li>
-                    <strong>Venue Name:</strong> <%= feedback.venue %><br>
-                    <strong>Description:</strong> <%= feedback.description %><br>
-                    <strong>Expenditure:</strong> <%= feedback.expenditure %><br>
-                    <strong>Location:</strong> <%= feedback.location %><br>
-                    <!-- <img src="/uploads/<%= feedback.img %>" alt="<%= feedback.venue %> "> -->
-                    <!-- You can include additional fields as needed -->
-                    <hr>
-                </li>
-            <% }); %>
-        </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Venue Name</th>
+          <th>Description</th>
+          <th>Expenditure</th>
+          <th>Location</th>
+          <th>Image</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% feedbacks.forEach(function(feedback) { %>
+        <tr>
+          <td><%= feedback.venue %></td>
+          <td><%= feedback.description %></td>
+          <td><%= feedback.expenditure %></td>
+          <td><%= feedback.location %></td>
+
+          <td>
+            <a href="/uploads/<%= feedback.img %>" target="_blank">Preview</a>
+          </td>
+        </tr>
+
+        <% }); %>
+      </tbody>
+    </table>
     <% } else { %>
-        <p>No feedback data available.</p>
+    <p>No feedback data available.</p>
     <% } %>
-</body>
+
+    <script>
+      // JavaScript for image preview
+      var modal = document.getElementById("imageModal");
+      var modalImg = document.getElementById("imgPreview");
+      var captionText = document.getElementById("caption");
+
+      // Close the modal when clicking on <span> (x)
+      var span = document.getElementsByClassName("close")[0];
+      span.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      // Function to open modal and display clicked image
+      function openModal(imgSrc, imgAlt) {
+        modal.style.display = "block";
+        modalImg.src = imgSrc;
+        captionText.innerHTML = imgAlt;
+      }
+    </script>
+  </body>
 </html>

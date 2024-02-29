@@ -56,12 +56,64 @@
       button:hover {
         background-color: #0056b3;
       }
+      nav {
+            background-color: #333;
+            color: #fff;
+            height: 65px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .right-side {
+            display: flex;
+            align-items: baseline;
+        }
+        .right-side a img{
+            height: 15px;
+        }
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        img{
+            height: 45px;
+        }
+        .left-side{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
     </style>
   </head>
   <body>
     <nav>
-      <a href="/"><h1>Monad electrics</h1></a>
-    </nav>
+      <div class="left-side">
+          <a href="/"><img src="../logo.jpeg" alt=""></a>
+          
+      </div>
+      
+  </nav>
+  
 
     <div class="main">
       <form action="/start" method="post">

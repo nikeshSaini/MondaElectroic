@@ -11,7 +11,7 @@ const multer = require("multer"); // Add multer for file upload handling
 var session = require('express-session')
 const app = express();
 const port = process.env.PORT ;
-
+const adminDetails = require("./models/adminDetails.js");
 app.use(session({
   secret: 'your_secret_key_here',
   resave: false,
@@ -160,7 +160,45 @@ app.post("/feedback", upload.single('pageImg'), async (req, res) => {
     res.status(500).send("Error saving feedback: " + error.message);
   }
 });
+app.get("/userlist",async (req,res)=>{
+  const userList =  await userDetails.find({});
+  res.render("userslist.ejs", {userList});
+})
 
+app.get('/admin', (req, res) => {
+  const adminCred = req.session.adminCred; // Retrieving userCred from session
+  if (!adminCred) {
+      return res.redirect('/adminlogin'); // Redirect to login if not authenticated
+  }
+  res.render("adminLanding.ejs", { adminCred });
+});
+
+//admin login post route
+const adminData = {
+  fullName: 'Kshrip Kumar',
+  email: 'admin5693@gmail.com',
+  password: 'admin@5693'
+};
+app.post("/adminlogin", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const adminCred = await adminDetails.findOne({ email });
+
+    if (!adminCred) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    if (adminCred.password !== password) {
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+
+    req.session.adminCred = adminCred; // Storing the admin credentials in session
+    res.redirect('/admin');
+  } catch (error) {
+    console.error("Error during admin login:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 
 
@@ -235,7 +273,11 @@ app.get('/user', (req, res) => {
   }
   res.render("landingPage.ejs", { userCred });
 });
+//admin login
 
+app.get("/adminlogin",(req,res)=>{
+  res.render("adminLogin.ejs");
+})
 // /register
 app.get("/register", (req,res)=>{
   res.render("userForm.ejs");
@@ -261,6 +303,33 @@ app.get('/view/feedback', async(req,res)=>{
   const feedbacks = await Listing.find({userId : currId});
   res.render("showFeedback.ejs",{feedbacks,currUserName});
 }); 
+//feedback via admin
+app.get('/view/feedback/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userDetails.findById(id); // Assuming userDetails is your user model
+    const currUserName = user.fullName;
+    const feedbacks = await Listing.find({ userId: id }); 
+    res.render("showFeedback", { feedbacks, currUserName });
+  } catch (error) {
+    console.error("Error fetching feedback:", error);
+    res.status(500).send("Error fetching feedback");
+  }
+});
+
+//attendance via admin
+app.get('/view/attendance/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const worksession = await WorkSession.find({ userId: id }); // Assuming userId field is used to identify the user in the WorkSession model
+    res.render("preview", { worksession });
+  } catch (error) {
+    console.error("Error fetching work session:", error);
+    res.status(500).send("Error fetching work session");
+  }
+});
+
+
 //attendance page route
 app.get('/view/attendance', async(req,res)=>{
   const userCred = req.session.userCred; // Retrieving userCred from session

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Listing = require("../models/listing.js");
 const UserDetails = require("../models/userDetails.js");
 const WorkSession =require("../models/attendance.js");
+const adminDetails = require("../models/adminDetails.js")
 
 
 //database connection
@@ -14,15 +15,18 @@ main()
   .catch((err) => {
     console.log(err);
   });
-async function main() { 
-
-  await mongoose.connect( process.env.MONGO_URL,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: 'Monad_Electronics',
-  });
+  async function main() { 
+    try {
+      await mongoose.connect(process.env.MONGO_URL, {
+        dbName: 'Monad_Electronics',
+      });
+      console.log("Connected to DB");
+    } catch (error) {
+      console.error("Error connecting to DB:", error);
+    }
+  }
   
-}
+  
 
 const initDB = async () => {
   try {
@@ -30,6 +34,14 @@ const initDB = async () => {
     await UserDetails.deleteMany({});
     await Listing.deleteMany({});
     await WorkSession.deleteMany({});
+    await adminDetails.deleteMany({});
+
+    ///insert admin details
+    await adminDetails.create({
+      fullName:'Kshrip Kumar',
+      email:'admin5693@gmail.com',
+      password:"admin@5693"
+    });
 
     // Insert user
     const user = await UserDetails.create({
@@ -65,3 +77,4 @@ const initDB = async () => {
     console.error("Error initializing data:", error);
   }
 };
+initDB();
