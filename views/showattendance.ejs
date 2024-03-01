@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Work Session</title>
@@ -104,27 +104,51 @@
             gap: 10px;
         }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <nav>
-      <div class="left-side">
-          <a href="/"><img src="../logo.jpeg" alt=""></a>
-          
-      </div>
-      
-  </nav>
-  
+        <div class="left-side">
+            <a href="/"><img src="../logo.jpeg" alt=""></a>
+        </div>
+    </nav>
 
     <div class="main">
-      <form action="/start" method="post">
-        <input type="hidden" id="userId" name="session[userId]" value="<%=  userCred._id %>">
-        <button type="submit">Start Work</button>
-      </form>
+        <form action="/start" method="post" id="startForm">
+            <input type="hidden" id="userId" name="session[userId]" value="<%=  userCred._id %>">
+            <!-- Hidden input fields for latitude and longitude -->
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+            <button onclick="getCurrentLocation(event)" type="submit">Start Work</button>
+        </form>
 
-      <form action="/end" method="post">
-        <input type="hidden" id="userId" name="session[userId]" value="<%=  userCred._id %>">
-        <button type="submit">End Work</button>
-      </form>
+        <form action="/end" method="post">
+            <input type="hidden" id="userId" name="session[userId]" value="<%=  userCred._id %>">
+            <button type="submit">End Work</button>
+        </form>
     </div>
-  </body>
+
+    <script>
+        // Function to get current location
+        function getCurrentLocation(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    // Get latitude and longitude
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+
+                    // Update hidden input fields with latitude and longitude
+                    document.getElementById("latitude").value = latitude;
+                    document.getElementById("longitude").value = longitude;
+
+                    // Submit the form
+                    document.getElementById("startForm").submit();
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+    </script>
+</body>
 </html>

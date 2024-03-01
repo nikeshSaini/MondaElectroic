@@ -35,7 +35,9 @@ main()
     console.log(err);
   });
 async function main() { 
-  await mongoose.connect( process.env.MONGO_URL);
+  await mongoose.connect(process.env.MONGO_URL, {
+    dbName: 'Monad_Electronics',
+  });
 }
 
  
@@ -100,18 +102,25 @@ app.get("/userPreview", async (req, res) => {
 //post data after submiting the form
 
 app.post('/start', async (req, res) => {
-
   try {
-    // Create a new work session document with the starting time
-    const sessionData =req.body.session;
-    const newworkSession = new WorkSession({
+    // Create a new work session document with the starting time and location
+    const sessionData = req.body.session;
+    const latitude = req.body.latitude;
+    const longitude = req.body.longitude;
+
+    const newWorkSession = new WorkSession({
       userId: sessionData.userId,
-      startTime: new Date()
+      startTime: new Date(),
+      location: {
+        type: 'Point',
+        coordinates: [longitude, latitude] // Note: longitude first, then latitude
+      }
     });
+
     // Save the document to the database
-    await newworkSession.save();
-    res.send('Starting time recorded.');
+    await newWorkSession.save();
     
+    res.send('Starting time recorded.');
   } catch (error) {
     console.error('Error recording starting time:', error);
     res.status(500).send('Error recording starting time.');
@@ -345,6 +354,10 @@ app.get('/attendance',(req,res)=>{
   const userCred = req.session.userCred;// Retrieving userCred from session
   res.render('showattendance.ejs',{userCred});
 })
+
+// app.get('/location',(req,res)=>{
+//   res.render('getcurrent.ejs');
+// })
 app.listen(port, (req, res)=>{
     console.log("app is listening" + port);
 });

@@ -7,7 +7,16 @@ const workSessionSchema = new mongoose.Schema({
       required: true
     },
     startTime: Date,
-    endTime: Date
+    endTime: Date,
+    location: {
+      type: {
+        type: String, // Specify the type of geometry
+        enum: ['Point'], // Specify the type of geometry as 'Point'
+      },
+      coordinates: {
+        type: [Number], // Array of numbers
+      }
+    }
   });
 
   const WorkSession = mongoose.model('WorkSession', workSessionSchema);
