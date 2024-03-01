@@ -291,6 +291,9 @@ app.get("/adminlogin",(req,res)=>{
 app.get("/register", (req,res)=>{
   res.render("userForm.ejs");
 });
+
+
+
 //feedback
 
 app.get('/feedback', (req, res) => {
@@ -330,13 +333,18 @@ app.get('/view/feedback/:id', async (req, res) => {
 app.get('/view/attendance/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const user = await userDetails.findById(id); // Assuming userDetails is your user model
+    const currUserName = user.fullName;
+
     const worksession = await WorkSession.find({ userId: id }); // Assuming userId field is used to identify the user in the WorkSession model
-    res.render("preview", { worksession });
+
+    res.render("adminpreview", { worksession, currUserName });
   } catch (error) {
     console.error("Error fetching work session:", error);
     res.status(500).send("Error fetching work session");
   }
 });
+
 
 
 //attendance page route

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Attendance record</title>
+    <style>
+        body{
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        nav {
+            background-color: #333;
+            color: #fff;
+            height: 65px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .right-side {
+            display: flex;
+            align-items: baseline;
+        }
+        .right-side a img{
+            height: 15px;
+        }
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        img{
+            height: 45px;
+        }
+        .left-side{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="left-side">
+            <a href="/"><img src="../logo.jpeg" alt=""></a>
+            
+        </div>
+        
+    </nav>
+    <h1>Attendance record : <%= currUserName %></h1>
+
+    
+    <table>
+        <thead>
+            <% if (!worksession || worksession.length === 0) { %>
+                <tr>
+                    <td colspan="4">No records found</td>
+                </tr>
+            <% } else { %>
+                <tr>
+                    <th>Serial Number</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                </tr>
+            <% }; %>
+        </thead>
+        <tbody>
+            <% worksession.forEach((session, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= formatDate(session.startTime) %></td>
+                    <td>
+                        <% if (session.location && session.location.coordinates && session.location.coordinates.length === 2) { %>
+                            Latitude: <%= session.location.coordinates[1] %><br>
+                            Longitude: <%= session.location.coordinates[0] %>
+                        <% } else { %>
+                            No location available
+                        <% } %>
+                    </td>
+
+                    <td><%= formatTime(session.startTime) %></td>
+                    <td><%= session.endTime ? formatTime(session.endTime) : 'Null' %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <% 
+    function formatDate(date) {
+        const formattedDate = new Date(date);
+        const day = formattedDate.getDate();
+        const month = formattedDate.getMonth() + 1; // Add 1 because getMonth() returns 0-based index
+        const year = formattedDate.getFullYear();
+        return `${day < 10 ? '0' + day : day}/ ${month < 10 ? '0' + month : month}/${year}`;
+    }
+
+    function formatTime(date) {
+        return new Date(date).toLocaleTimeString();
+    }
+    %>
+</body>
+</html>
