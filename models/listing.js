@@ -11,6 +11,7 @@ const listingSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  entryTime: Date,
   description: {
     type: String,
     required: true

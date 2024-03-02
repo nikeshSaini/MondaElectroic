@@ -10,8 +10,13 @@
         font-family: Arial, sans-serif;
         background-color: #f4f4f4;
       }
+      .table-container{
+            text-align: center;
+            margin: 0px 20px;
+        }
       nav {
         background-color: #333;
+  
         color: #fff;
         height: 65px;
         padding: 10px 20px;
@@ -89,6 +94,25 @@
         padding: 8px;
         text-align: left;
       }
+      .description-cell {
+        padding: 8px 12px;
+        width: 450px;
+        line-height: 1;
+        max-width: 450px; /* Set the fixed width */
+        text-overflow: ellipsis;
+        overflow-y: auto;
+      }
+      .description {
+        max-height: 500px; /* Initial height */
+        overflow: hidden;
+      }
+      .expanded {
+        max-height: none; /* Expanded height */
+      }
+    a{
+      text-decoration: none;
+    }
+   
     </style>
   </head>
   <body>
@@ -99,41 +123,89 @@
     </nav>
     <h1>Feedback Data: <%= currUserName %></h1>
     <% if (feedbacks.length > 0) { %>
-    <table>
-      <thead>
-        <tr>
-          <th>Venue Name</th>
-          <th>Description</th>
-          <th>Expenditure</th>
-          <th>Location</th>
-          <th>Image</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% feedbacks.forEach(function(feedback) { %>
-        <tr>
-          <td><%= feedback.venue %></td>
-          <td><%= feedback.description %></td>
-          <td><%= feedback.expenditure %></td>
-          <td><%= feedback.location %></td>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Venue Name</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Description</th>
+            <th>Expenditure</th>
+            <th>Location</th>
+            <th>Image</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% feedbacks.forEach(function(feedback,i) { %>
+          <tr>
+            <td><%=i+1  %></td>
+            <td><%= feedback.venue %></td>
+            <td><%= formatDate(feedback.entryTime) %></td>
+            <td><%= formatTime(feedback.entryTime) %></td>
+            <td class="description-cell">
+              <div class="description">
+               
+                <%= feedback.description.slice(0, 50) %>
+                
+                <span class="more" style="display: none;"><%= feedback.description.slice(50) %></span>
+                
+                <% if (feedback.description.length > 50) { %>
+                  <a href="#" onclick="toggleDescription(this); return false;">...Read more</a>
+                <% } %>
+              </div>
+            </td>
+    
+            <td><%= feedback.expenditure %></td>
+            <td><%= feedback.location %></td>
+  
+            <td>
+              <a href="/uploads/<%= feedback.img %>" target="_blank">Preview</a>
+            </td>
+          </tr>
+  
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <%
+      function formatDate(date) {
+          const formattedDate = new Date(date);
+          const day = formattedDate.getDate();
+          const month = formattedDate.getMonth() + 1; // Add 1 because getMonth() returns 0-based index
+          const year = formattedDate.getFullYear();
+          return `${day < 10 ? '0' + day : day}/ ${month < 10 ? '0' + month : month}/${year}`;
+      }
+      function formatTime(date) {
+          return new Date(date).toLocaleTimeString();
+      } 
+     %>
 
-          <td>
-            <a href="/uploads/<%= feedback.img %>" target="_blank">Preview</a>
-          </td>
-        </tr>
 
-        <% }); %>
-      </tbody>
-    </table>
     <% } else { %>
     <p>No feedback data available.</p>
     <% } %>
+
+    
 
     <script>
       // JavaScript for image preview
       var modal = document.getElementById("imageModal");
       var modalImg = document.getElementById("imgPreview");
       var captionText = document.getElementById("caption");
+
+
+      function toggleDescription(link) {
+      var moreText = link.previousElementSibling; // Get the span containing the full description
+      if (moreText.style.display === "none") {
+        moreText.style.display = "inline"; // Show full description
+        link.innerHTML = "Read less"; // Change link text
+      } else {
+        moreText.style.display = "none"; // Hide full description
+        link.innerHTML = "Read more"; // Change link text
+      }
+    }
 
       // Close the modal when clicking on <span> (x)
       var span = document.getElementsByClassName("close")[0];
@@ -147,6 +219,8 @@
         modalImg.src = imgSrc;
         captionText.innerHTML = imgAlt;
       }
+
+      
     </script>
   </body>
 </html>

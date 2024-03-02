@@ -51,9 +51,11 @@ const initDB = async () => {
     });
 
     // Create listing associated with the user
+    const entryTime = new Date();
     await Listing.create({
       userId: user._id, // Associate the listing with the user
       venue: "hotel",
+      entryTime:entryTime,
       description: "having good time",
       img: "null",
       expenditure: 3000,

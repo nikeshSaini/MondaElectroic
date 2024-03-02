@@ -8,6 +8,10 @@
         body{
             margin: 0;
         }
+        .table-container{
+            text-align: center;
+            margin: 0px 20px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -74,9 +78,8 @@
         </div>
         
     </nav>
-    <h1>Attendance record : <%= currUserName %></h1>
-
-    
+    <div class="table-container">
+        <h1>Attendance record : <%= currUserName %></h1>
     <table>
         <thead>
             <% if (!worksession || worksession.length === 0) { %>
@@ -113,6 +116,7 @@
             <% }); %>
         </tbody>
     </table>
+    </div>
 
     <% 
     function formatDate(date) {

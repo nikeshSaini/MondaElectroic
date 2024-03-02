@@ -6,10 +6,15 @@
     <title>User List</title>
     <style>
         body {
-            margin: 0;
+            margin: 0px;
             font-family: Arial, sans-serif;
         }
+        .table-container{
+            text-align: center;
+            margin: 0px 20px;
+        }
         table {
+            
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
@@ -64,6 +69,7 @@
         /* Responsive styles */
         @media screen and (max-width: 600px) {
             table {
+                margin: 0px 20px;
                 font-size: 12px;
             }
             th, td {
@@ -91,28 +97,32 @@
             <a href="/admin"><img src="../logo.jpeg" alt=""></a>
         </div>
     </nav>
-    <h1>User List</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% userList.forEach(user => { %>
+    <div class="table-container">
+        <h1>Employee's List</h1>
+        <table>
+            <thead>
                 <tr>
-                    <td><%= user.fullName %></td>
-                    <td><%= user.email %></td>
-                    <td>
-                        <a href="/view/attendance/<%= user._id %>" class="btn">Check Attendance</a>
-                        <a href="/view/feedback/<%= user._id %>" class="btn">Check Feedback</a>
-                        
-                    </td>
+                    <th>S.No.</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
                 </tr>
-            <% }); %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% userList.forEach((user,i) => { %>
+                    <tr>
+                        <td><%=i+1 %></td>
+                        <td><%= user.fullName %></td>
+                        <td><%= user.email %></td>
+                        <td>
+                            <a href="/view/attendance/<%= user._id %>" class="btn">Check Attendance</a>
+                            <a href="/view/feedback/<%= user._id %>" class="btn">Check Feedback</a>
+                            
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

@@ -155,6 +155,7 @@ app.post("/feedback", upload.single('pageImg'), async (req, res) => {
     const img = req.file.filename;
     const feedbackItem = new Listing({
       userId: feedbackData.userId,
+      entryTime: new Date(),
       venue: feedbackData.venue,
       description: feedbackData.description,
       img: img,
